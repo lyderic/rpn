@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	VERSION = "0.0.1"
+	VERSION = "0.0.2"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 			continue
 		}
 		switch line[0] {
-		case 'q':
+		case 'q', 'x':
 			os.Exit(0)
 		case 'v':
 			verbose = !verbose
@@ -68,7 +68,7 @@ func main() {
 func display(input []string, fix int, verbose bool) {
 	result, err := calculate(input, verbose)
 	if err != nil {
-		fmt.Printf("Input: '%#v' failed! %v\n", input, err)
+		fmt.Printf("Invalid input! %v\n", err)
 	} else {
 		format := fmt.Sprintf("%%.%df\n", fix)
 		fmt.Printf(format, result)

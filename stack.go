@@ -6,6 +6,10 @@ import (
 )
 
 func calculate(input []string, verbose bool) (result float64, err error) {
+	if len(input) < 3 {
+		err = fmt.Errorf("need 3 tokens minimum")
+		return
+	}
 	var stack []float64
 	for _, token := range input {
 		switch token {
@@ -29,7 +33,7 @@ func calculate(input []string, verbose bool) (result float64, err error) {
 		default:
 			f, e := strconv.ParseFloat(token, 64)
 			if e != nil {
-				err = fmt.Errorf("%s: invalid!", token)
+				err = fmt.Errorf("token %q not valid", token)
 			}
 			stack = append(stack, f)
 		}
