@@ -13,19 +13,19 @@ func calculate(input []string, verbose bool) (result float64, err error) {
 	var stack []float64
 	for _, token := range input {
 		switch token {
-		case "+":
+		case "+", "a", "p":
 			stack[len(stack)-2] += stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
 		case "*", "x":
 			stack[len(stack)-2] *= stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
-		case "-":
+		case "-", "s", "m":
 			stack[len(stack)-2] -= stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
-		case "/", ":":
+		case "/", ":", "d":
 			stack[len(stack)-2] /= stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
-		case "u":
+		case "u", "r":
 			x := stack[len(stack)-1]
 			y := stack[len(stack)-2]
 			stack[len(stack)-1] = y

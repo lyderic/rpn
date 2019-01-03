@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	VERSION = "0.0.2"
+	VERSION = "0.0.3"
 )
 
 func main() {
@@ -22,12 +22,19 @@ func main() {
 	flag.Usage = usage
 	flag.Parse()
 	fifo, _ := os.Stdin.Stat()
+	var input []string
 	if (fifo.Mode() & os.ModeCharDevice) == 0 {
 		bytes, _ := ioutil.ReadAll(os.Stdin)
-		input := strings.Fields(string(bytes))
+		input = strings.Fields(string(bytes))
 		display(input, fix, verbose)
 		return
 	}
+	if len(flag.Args()) > 0 {
+		input = flag.Args()
+		display(input, fix, verbose)
+		return
+	}
+	version()
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		print("rpn> ")
@@ -42,6 +49,9 @@ func main() {
 		case 'v':
 			verbose = !verbose
 			fmt.Println("verbose:", verbose)
+			continue
+		case 'h':
+			commands()
 			continue
 		case 'V':
 			fmt.Println("version:", VERSION)
@@ -75,18 +85,26 @@ func display(input []string, fix int, verbose bool) {
 	}
 }
 
-func usage() {
+func version() {
 	fmt.Printf("rpn v.%s - (c) Lyderic Landry, London 2019\n", VERSION)
-	fmt.Println("Usage: rpn <options>")
+}
+
+func commands() {
+	fmt.Println(`Commands:
+  +, a, p     addition
+  -, s, m     substraction
+  *, x        multiplication
+  /, :, d     division
+  u, r        swap X <-> Y`)
+}
+
+func usage() {
+	version()
+	fmt.Println("Usage: rpn <options> <expression>")
 	fmt.Println("Options:")
 	flag.PrintDefaults()
-	fmt.Println(`Commands:
-  +     addition
-  -     substraction
-  *, x  multiplication
-  /, :  division
-  u     swap X <-> Y
-Examples:
+	fmt.Println(`Examples:
   $ echo '3 3 x' | rpn
-  $ echo '45 90 4.004 * u /' | rpn -f 3`)
+  $ echo '45 90 4.004 * u /' | rpn -f 3
+  $ rpn 1 2 3 4 5 x x x x`)
 }
