@@ -15,6 +15,6 @@ func TestCalculate(t *testing.T) {
 		[]string{"45", "90", "4", "x", "u", ":"},
 	}
 	for _, input := range inputs {
-		display(input)
+		display(input, 4, true)
 	}
 }
